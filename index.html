@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSRI Contact Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #142033;
+      --muted: #6b778c;
+      --line: #d9e1ee;
+      --primary: #203a69;
+      --primary-2: #2f5aa6;
+      --success: #1f8b5f;
+      --error: #b42318;
+      --shadow: 0 10px 30px rgba(20, 32, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Titillium Web", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      color: var(--text);
+      padding: 28px;
+    }
+
+    .form-card {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .form-header {
+      padding: 28px 30px 22px;
+      border-top: 8px solid var(--primary);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+    }
+
+    .form-header h2 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .form-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 18px;
+      max-width: 62ch;
+    }
+
+    form {
+      padding: 24px 30px 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .required::after {
+      content: " *";
+      color: #c33434;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 15px;
+      font: inherit;
+      color: var(--text);
+      background: #fcfdff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 4px rgba(47, 90, 166, 0.12);
+      background: white;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .consent input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 22px;
+      background: var(--primary);
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .button:hover:not(:disabled) {
+      background: #172c50;
+      transform: translateY(-1px);
+    }
+
+    .button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--line);
+    }
+
+    .button.secondary:hover {
+      background: #f8fbff;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .message-box {
+      display: none;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      line-height: 1.55;
+    }
+
+    .message-box.show {
+      display: block;
+    }
+
+    .message-box.success {
+      border: 1px solid rgba(31, 139, 95, 0.18);
+      background: rgba(31, 139, 95, 0.08);
+      color: #14573d;
+    }
+
+    .message-box.error {
+      border: 1px solid rgba(180, 35, 24, 0.18);
+      background: rgba(180, 35, 24, 0.08);
+      color: #7a271a;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-header,
+      form {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .form-header h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="form-card">
+    <div class="form-header">
+      <h2>Contact form</h2>
+      <p>
+        Use the form below to get in touch regarding cooperation, research,
+        projects, media enquiries or general questions.
+      </p>
+    </div>
+
+    <form id="contactForm" method="post" novalidate>
+      <div class="grid">
+        <div class="field">
+          <label class="required" for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required />
+        </div>
+
+        <div class="field">
+          <label class="required" for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="Your email address" required />
+        </div>
+
+        <div class="field">
+          <label for="organisation">Organisation</label>
+          <input id="organisation" name="organisation" type="text" placeholder="Your organisation" />
+        </div>
+
+        <div class="field">
+          <label class="required" for="enquiryType">Type of enquiry</label>
+          <select id="enquiryType" name="enquiryType" required>
+            <option value="">Select an option</option>
+            <option>Collaboration</option>
+            <option>Project enquiry</option>
+            <option>Research</option>
+            <option>Media / communication</option>
+            <option>General question</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" type="text" placeholder="Message subject" />
+        </div>
+
+        <div class="field full">
+          <label class="required" for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us more about your enquiry" required></textarea>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <label class="consent">
+          <input id="consent" name="consent" type="checkbox" required />
+          <span>I agree to be contacted regarding this enquiry and understand that the submitted information will be used solely for communication purposes.</span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button class="button" id="submitButton" type="submit">Send message</button>
+        <button class="button secondary" type="reset">Clear form</button>
+        <span class="note">Connect this form to your Vercel endpoint at <strong>/api/contact</strong>.</span>
+      </div>
+
+      <div id="successMessage" class="message-box success"></div>
+      <div id="errorMessage" class="message-box error"></div>
+    </form>
+  </section>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('successMessage');
+    const errorBox = document.getElementById('errorMessage');
+    const submitButton = document.getElementById('submitButton');
+
+    function hideMessages() {
+      success.classList.remove('show');
+      errorBox.classList.remove('show');
+      success.textContent = '';
+      errorBox.textContent = '';
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      hideMessages();
+
+      const formData = new FormData(form);
+      const payload = {
+        name: (formData.get('name') || '').trim(),
+        email: (formData.get('email') || '').trim(),
+        organisation: (formData.get('organisation') || '').trim(),
+        enquiryType: (formData.get('enquiryType') || '').trim(),
+        subject: (formData.get('subject') || '').trim(),
+        message: (formData.get('message') || '').trim(),
+        consent: formData.get('consent') === 'on'
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          errorBox.textContent = result.message || 'Unable to send the form. Please try again.';
+          errorBox.classList.add('show');
+          return;
+        }
+
+        success.textContent = result.message || 'Thank you. Your message has been sent successfully.';
+        success.classList.add('show');
+        form.reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        errorBox.textContent = 'Unable to send the form. Please try again.';
+        errorBox.classList.add('show');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send message';
+      }
+    });
+  </script>
+</body>
+</html>
