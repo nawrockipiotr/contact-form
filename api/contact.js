@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       return res.status(400).json({
         success: false,
