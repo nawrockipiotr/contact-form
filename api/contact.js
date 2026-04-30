@@ -51,7 +51,7 @@ export default async function handler(req, res) {
 
     await resend.emails.send({
       from: 'CSRI Contact <onboarding@resend.dev>',
-      to: 'TU_WPISZ_SWÓJ_EMAIL',
+      to: 'pnawrocki@wz.uw.edu.pl',
       reply_to: email,
       subject: emailSubject,
       html
