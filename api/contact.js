@@ -1,3 +1,7 @@
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({
@@ -32,11 +36,34 @@ export default async function handler(req, res) {
       });
     }
 
+    const emailSubject = `[CSRI Contact] ${enquiryType} – ${name}`;
+
+    const html = `
+      <h2>New CSRI contact form submission</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Organisation:</strong> ${organisation || '-'}</p>
+      <p><strong>Type of enquiry:</strong> ${enquiryType}</p>
+      <p><strong>Subject:</strong> ${subject || '-'}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, '<br>')}</p>
+    `;
+
+    await resend.emails.send({
+      from: 'CSRI Contact <onboarding@resend.dev>',
+      to: 'TU_WPISZ_SWÓJ_EMAIL',
+      reply_to: email,
+      subject: emailSubject,
+      html
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Thank you. Your message has been sent successfully.'
     });
   } catch (error) {
+    console.error(error);
+
     return res.status(500).json({
       success: false,
       message: 'Something went wrong. Please try again.'
