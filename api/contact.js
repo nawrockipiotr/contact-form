@@ -49,21 +49,30 @@ export default async function handler(req, res) {
       <p>${message.replace(/\n/g, '<br>')}</p>
     `;
 
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'CSRI Contact <onboarding@resend.dev>',
-      to: 'pnawrocki@wz.uw.edu.pl',
+      to: ['delivered@resend.dev'],
       reply_to: email,
       subject: emailSubject,
       html
     });
 
+    if (error) {
+      console.error('Resend error:', error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Email sending failed.'
+      });
+    }
+
+    console.log('Resend success:', data);
+
     return res.status(200).json({
       success: true,
       message: 'Thank you. Your message has been sent successfully.'
     });
-  } catch (error) {
-    console.error(error);
-
+  } catch (err) {
+    console.error('Handler error:', err);
     return res.status(500).json({
       success: false,
       message: 'Something went wrong. Please try again.'
